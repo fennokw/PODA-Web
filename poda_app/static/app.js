@@ -918,7 +918,7 @@
   // =====================================================================
   route('files', async ({ view, inspector, setTitle, setInspectorTitle }) => {
     setTitle('Files & Agent'); setInspectorTitle('Grant model'); $('#viewCrumb').textContent = 'Scoped tools with receipts';
-    inspector.append(el('p', { class: 'small muted' }, 'PODA can only access the files and folders you grant. A file grant covers that file alone. Edit mode also creates and edits files with hash-validated patches and backups. Temporary grants expire automatically. Execution is a separate flag.'),
+    inspector.append(el('p', { class: 'small muted' }, 'PODA Sandbox has its own file access. External files and folders use grants. A file grant covers that file alone. Edit mode also creates and edits files with hash-validated patches and backups. Temporary grants expire automatically. Execution is a separate flag.'),
       el('p', { class: 'small faint' }, 'Revoking a grant removes the capability from the ledger immediately. Every write produces a receipt; a failed write never produces a success receipt.'));
     const grantsBox = el('div'); const toolsBox = el('div'); const receiptsBox = el('div'); const proposalsBox = el('div');
     const pathInput = el('input', { class: 'input', id: 'g-path', name: 'root_path', placeholder: '~/Desktop/PODA-sandbox', required: true });
@@ -974,6 +974,9 @@
       });
     }
     view.appendChild(el('div', { class: 'screen stack' },
+      section('PODA Sandbox', 'writable workspace · no grant required',
+        el('p', { class: 'small muted' }, 'Files created in chat are saved here. Import a copy of a file and ask PODA to revise it by name. Download a copy to your computer when you’re ready.'),
+        el('div', { class: 'row' }, upload, uploadButton), sandboxBox),
       el('div', { class: 'grid-main-side' }, section('File and path grants', 'scoped access to your files', grantsBox), section('Grant access', null, form)),
       el('div', { class: 'grid-2' }, section('Tool registry', 'what the agent can call', toolsBox), section('Pending proposals', 'awaiting your approval', proposalsBox)),
       section('Action receipts', 'the only evidence of a completed side effect', receiptsBox),
