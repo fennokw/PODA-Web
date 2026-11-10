@@ -20,6 +20,10 @@ jobs:
         run: python -m compileall -q poda_app tests
       - name: Run local unit tests without external accounts or Ollama
         run: python -m pytest -q tests
+      - name: Verify managed Hindsight memory on Linux
+        env:
+          PODA_TEST_NATIVE_HINDSIGHT: '1'
+        run: python -m pytest -q tests/test_managed_addons.py -k native_hindsight
       - name: Build public archive and inspect entries
         run: |
           python tools/release_guard.py --package

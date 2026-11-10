@@ -24,3 +24,5 @@ For installed apps, see [PODA for Mac](https://github.com/fennokw/PODA) and [POD
 The upstream PODA source is distributed under [LICENSE-PODA](LICENSE-PODA). This repository's license is in [LICENSE](LICENSE).
 
 Daily Automation resolves email event dates against the original send time, then verifies authorized Notion additions. To use the same read-only scheduling tools from an MCP client, run `python -m poda_app.scheduling.mcp` over stdio from the source folder with the PODA Python environment.
+
+Use **Personalize → Memory search with Hindsight** to install and enable the local search engine. Setup uses an installed Ollama chat model and the PODA embedding model. Hindsight keeps a derived index in the app's data folder. **Add-ons** contains the downloadable program catalog and saved skills. Program tools require a separate trust opt-in and per-tool enable switch. **Developer mode** in the toolbar reveals technical diagnostics.
