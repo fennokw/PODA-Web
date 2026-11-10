@@ -21,7 +21,7 @@ ALLOWED_TOP_FILES = {
     "LICENSE", "LICENSE-PODA", "PODA_VERSION.txt", "requirements.txt", "Setup-PODA.cmd", "Start-PODA.cmd",
     "setup-windows.ps1", "setup_poda.command", "start_poda.command", "STOP_PODA.command",
     "BACKUP_PODA.command", "RESTORE_PODA.command", "reset_poda_memory.command",
-    "INSTALL_PODA.command", "PACKAGE_PODA.command", "VERIFY_PODA.command", "install_ollama_models.command", "repair_open3d.command", "repair_poda_setup.command",
+    "INSTALL_PODA.command", "PACKAGE_PODA.command", "VERIFY_PODA.command", "repair_open3d.command", "repair_poda_setup.command",
 }
 ALLOWED_DIRS = {"poda_app", "tests", "docs", "tools", ".github"}
 ALLOWED_EXT = {".py", ".js", ".css", ".html", ".svg", ".md", ".yml", ".yaml", ".txt", ".json", ".cmd", ".ps1", ".command", ".dockerfile"}

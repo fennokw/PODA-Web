@@ -51,21 +51,6 @@ if [ -n "$existing_pid" ]; then
   fi
 fi
 
-if ! command -v ollama >/dev/null 2>&1; then
-  echo "WARNING: Ollama is not installed. The UI will start, but chat and semantic memory need Ollama (https://ollama.com/download/mac)."
-else
-  if ! curl -s http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
-    echo "Starting Ollama service..."
-    (ollama serve >/tmp/poda-ollama.log 2>&1 &) || true
-    sleep 3
-  fi
-  for m in nomic-embed-text llama3.2:3b qwen3:14b; do
-    if ! curl -s http://127.0.0.1:11434/api/tags | grep -q "\"$m"; then
-      echo "Model $m is not installed. Run ./install_ollama_models.command"
-    fi
-  done
-fi
-
 PODA_DATA_DIR="${PODA_DATA_DIR:-$HOME/Library/Application Support/PODA-Web}"
 export PODA_DATA_DIR
 mkdir -p "$PODA_DATA_DIR/logs" && chmod 700 "$PODA_DATA_DIR" "$PODA_DATA_DIR/logs"

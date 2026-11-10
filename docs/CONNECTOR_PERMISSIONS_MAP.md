@@ -4,7 +4,7 @@
 
 | Connector | Credential / authority | Storage | Access / safety | External host |
 |---|---|---|---|---|
-| Ollama | local daemon, no account | separate local Ollama service | chat, coding, embeddings and tool planning; installed models discovered at runtime | `127.0.0.1:11434` |
+| llama.cpp | local daemon, no account | PODA-managed native worker | chat, coding, embeddings and tool planning; installed models discovered at runtime | private loopback port |
 | Notion | user-created internal integration token | Keychain `PODA.Public.Notion` | original database/data-source read after explicit sharing; write only after schema mapper, verification and confirmation | exact HTTPS `api.notion.com`, redirects denied |
 | Apple Mail | macOS Automation permission for already-configured Mail.app | Mail.app holds account credentials; PODA stores scoped metadata | read first; modification and sending require separate per-account scopes; send/trash ask for confirmation | Mail.app itself connects to its configured providers |
 | Gmail IMAP/SMTP | account-specific app password | Keychain `PODA.Public.Gmail` | Gmail hosts only, per-account modify/send grants and receipts | `imap.gmail.com`, `smtp.gmail.com` |

@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param()
 $ErrorActionPreference = 'Stop'
+Set-Location -LiteralPath $PSScriptRoot
 
 function Run-Checked {
     param([string]$Executable, [string[]]$Arguments)
@@ -29,6 +30,7 @@ try {
     Run-Checked $Launcher.Source @('-3.12', '-I', '-m', 'venv', $Runtime)
     Run-Checked $Python @('-I', '-m', 'pip', 'install', '--only-binary=:all:', '--disable-pip-version-check', '-r', $Requirements)
     Run-Checked $Python @('-I', '-c', 'import fastapi, uvicorn, win32cred, pythoncom, open3d; from sqlcipher3 import dbapi2; from zoneinfo import ZoneInfo; assert dbapi2.connect('':memory:'').execute(''PRAGMA cipher_version'').fetchone(); ZoneInfo(''America/New_York'')')
+    Run-Checked $Python @('-m', 'poda_app.runtime.llama_install')
     [IO.File]::WriteAllText($Ready, $Version)
     Write-Host 'PODA runtime is ready. Run Start-PODA.cmd to launch PODA Web.'
 }

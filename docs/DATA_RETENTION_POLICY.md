@@ -15,4 +15,4 @@ The public GitHub repository and downloadable source ZIP include **no** personal
 | Encrypted backups | Private app-support `backups/` | User-created `.podabkp` encrypted with OS credential-backed AES-GCM key; delete old backups deliberately, retain a secure key recovery method |
 | Manual plaintext export | Wherever the user explicitly exports it | **Outside encryption boundary**; handle and securely remove under your own threat model |
 
-Deleting the checkout leaves app data, OS credentials, Ollama models, and external accounts in place. Back up the database before removing its data directory.
+Deleting the checkout leaves app data, OS credentials, downloaded GGUF models, and external accounts in place. Back up the database before removing its data directory.
