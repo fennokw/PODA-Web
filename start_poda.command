@@ -11,6 +11,8 @@ if [ ! -d .venv ] || ! .venv/bin/python -c 'import fastapi,pydantic,uvicorn,open
   ./setup_poda.command
 fi
 
+.venv/bin/python -m poda_app.runtime.chat_renderers
+
 EXPECTED_BUILD="$(.venv/bin/python -c 'from poda_app.runtime.config import BUILD_ID; print(BUILD_ID)')"
 
 existing_pid="$(lsof -tiTCP:${PORT} -sTCP:LISTEN 2>/dev/null | head -1 || true)"

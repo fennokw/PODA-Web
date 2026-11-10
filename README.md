@@ -13,6 +13,8 @@ Open [PODA Web on loopback](http://127.0.0.1:8787). Keep the server running for 
 
 Install Ollama for local chat and embeddings. Pull the starter models with `ollama pull llama3.2:3b` and `ollama pull nomic-embed-text`.
 
+The launch scripts install the pinned chat preview assets on first use. After that, diagrams, equations, code highlighting, and sandbox image previews work offline. For a manual server launch, run `python -m poda_app.runtime.chat_renderers` once in the PODA environment.
+
 ## Data and integrations
 
 PODA Web uses `~/Library/Application Support/PODA-Web` on macOS and `%LOCALAPPDATA%\PODA-Web` on Windows, with separate OS credentials. Create encrypted backups from Privacy. Browser hosting and desktop each keep their own data and connector setup by default.
