@@ -9,7 +9,7 @@ executables.
 | Upstream | Compatibility decision |
 |---|---|
 | [schedule-agent](https://github.com/addabjork/schedule-agent) (MIT) | Use evidence-first event extraction and confirmation flow. Do **not** transplant Claude, Twilio, Google Calendar, Google Maps, SendGrid or Railway services into a local-only product. |
-| [open-schedule-agent](https://github.com/anthroos/open-schedule-agent) (MIT) | Adopt timezone-aware scheduling checks and an Ollama-compatible workflow. Never use its fail-open calendar outage fallback. |
+| [open-schedule-agent](https://github.com/anthroos/open-schedule-agent) (MIT) | Adopt timezone-aware scheduling checks and an llama.cpp-compatible workflow. Never use its fail-open calendar outage fallback. |
 | [meeting-mistro](https://github.com/Meeting-Mistro/meeting-mistro) (license not identified) | Follow general meeting-from-email design; no proprietary code is copied. |
 | [ECC](https://github.com/affaan-m/ecc) (MIT) | User-selectable skills, routing and research-first programming. Use only permissioned, non-executable markdown as context. |
 | [Cortex Suite](https://github.com/Artistsyn/cortex_suite) (license not identified) | Native static symbol/import mapping (`code_context`), hash-bound edits, tool receipts, testing and corrective feedback, **not** its complete Rust MCP binaries. |
@@ -19,7 +19,7 @@ executables.
 
 Canonical: PODA encrypted `memory_nodes`, `memory_links`, and visible
 user-editable memory tree. Optional: Hindsight local server on
-`127.0.0.1:8888` using Ollama LLM/embedding endpoints. A stable
+`127.0.0.1:8888` using the managed local chat and embedding bridge. A stable
 `document_id=poda-node-<node ID>` links derived Hindsight facts to their
 source node. Hindsight cannot create or delete authoritative PODA nodes.
 Background sync publishes only committed nodes and propagates removed PODA
@@ -29,7 +29,7 @@ combined SQLCipher database. Do not send sensitive memories until you
 verify its local server's on-disk encryption and backup policy.
 
 For truly local inference, configure the Hindsight engine with its
-`ollama` provider and locally installed models. Follow the upstream
+managed llama.cpp OpenAI-compatible bridge and locally installed GGUF models. Follow the upstream
 installation guide. Do not configure `openai`, Hindsight Cloud, or remote
 URLs. The PODA adapter deliberately refuses non-loopback destinations.
 PODA does not silently install packages, Docker images or background
@@ -63,13 +63,13 @@ shown separately. Disk measurements use the actual location of PODA's
 data directory when present. Estimated model weights, runtime buffer and
 minimum disk headroom determine tentative compatibility; model tokens/s,
 GPU-offload performance and thermal behavior require Mac-side testing.
-All catalog entries are local Ollama families; no automatic downloads,
+All catalog entries are verified local GGUF families; no automatic downloads,
 remote inference or license assumptions.
 
 ## Limitations
 
 - GitHub Actions runs synthetic local tests; it cannot verify a user's
-  actual Mac/Ollama performance, connected IMAP, Notion, Hindsight daemon
+  actual Mac/llama.cpp performance, connected IMAP, Notion, Hindsight daemon
   or Rust toolchain.
 - Hindsight cannot be claimed *fully active* until installed and
   configured locally; Cortex full MCP servers are not installed.

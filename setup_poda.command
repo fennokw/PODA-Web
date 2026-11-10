@@ -53,4 +53,6 @@ if ! "$VENV/bin/python" -c 'from sqlcipher3 import dbapi2' >/dev/null 2>&1; then
   echo 'ERROR: SQLCipher is REQUIRED for public-release personal storage. Resolve setup before starting PODA.'
   exit 1
 fi
-echo "PODA Python setup complete. Next: ./install_ollama_models.command, then ./start_poda.command"
+"$VENV/bin/python" -m poda_app.runtime.chat_renderers
+PODA_DATA_DIR="$PODA_DATA_DIR" "$VENV/bin/python" -m poda_app.runtime.llama_install
+echo "PODA Python setup complete. Run ./start_poda.command, then download GGUF models in System"

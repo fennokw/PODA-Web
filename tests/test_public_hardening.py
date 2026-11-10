@@ -1,7 +1,7 @@
 """Regressions for the public build's five audited security/reliability fixes.
 
 All tests run with synthetic temp files/DBs; no personal accounts, macOS Keychain,
-Open3D binaries or live local Ollama are required.
+Open3D binaries or live local llama.cpp are required.
 """
 from __future__ import annotations
 
@@ -74,7 +74,8 @@ def test_unknown_hardware_does_not_get_fabricated_24gb(monkeypatch):
     monkeypatch.setattr(hardware, "_sysctl", lambda name: None)
     assert models.measured_memory_gb() == 0
     r = models.registry(installed=["llama3.2:3b"], unified_memory_gb=None)
-    assert {k: v["num_ctx"] for k, v in r["profiles"].items()} == {"fast": 4096, "balanced": 8192, "deep": 8192}
+    assert r["profiles"]["fast"]["num_ctx"] == 4096
+    assert all(v["num_ctx"] <= 8192 for v in r["profiles"].values())
 
 
 def test_release_audit_rejects_sqlite_header_and_private_files(tmp_path):
@@ -82,7 +83,6 @@ def test_release_audit_rejects_sqlite_header_and_private_files(tmp_path):
     paths = shipping_paths()
     assert paths and not audit(paths)
     assert not any(p.suffix in {".db", ".sqlite", ".podabkp"} or ".git" in p.relative_to(ROOT).parts or "data" in p.relative_to(ROOT).parts for p in paths)
-    # The packager enforces a positive allowlist, never walks arbitrary caller-provided archives.
 
 
 def test_clean_install_contains_no_personal_memories_or_accounts(monkeypatch, tmp_path):

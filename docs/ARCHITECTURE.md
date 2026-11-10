@@ -1,6 +1,6 @@
 # PODA v0.6.0-public — Architecture
 
-The public source build is a **single-machine local-first application**. The browser frontend uses bundled HTML/CSS/JavaScript and WebGL2; the API is FastAPI/Uvicorn bound only to `127.0.0.1`. The local Ollama service handles chat, planning and embeddings. SQLCipher persists memory and audit data outside the source checkout; macOS Keychain keeps encryption keys and connector secrets. External access is opt-in for Notion and connected mail providers only.
+The public source build is a **single-machine local-first application**. The browser frontend uses bundled HTML/CSS/JavaScript and WebGL2; the API is FastAPI/Uvicorn bound only to `127.0.0.1`. PODA’s managed llama.cpp worker handles chat, planning and embeddings. SQLCipher persists memory and audit data outside the source checkout; macOS Keychain keeps encryption keys and connector secrets. External access is opt-in for Notion and connected mail providers only.
 
 ```text
 Browser (localhost:8787, no CDN/telemetry)
@@ -13,16 +13,16 @@ FastAPI application [poda_app/main.py]
   ├── chat/: model grounding, live capabilities, tool proposals, SSE streams
   ├── memory/: source chat pairs, durable facts, distilled surface meanings,
   │              cached embeddings, FTS5, spatial positions, transactional edits
-  │              POSTCOMMIT embedding queue (no Ollama network call in DB transaction)
+  │              POSTCOMMIT embedding queue (no llama.cpp network call in DB transaction)
   ├── agent/: folder-granted file tools, action receipts, sandbox-aware Python execution,
   │             optional separately acknowledged third-party CLI tools
   ├── connectors/notion/: original-source discovery, schema mapper, agenda, staged writes
   ├── connectors/email/: Apple Mail automation; optional Gmail IMAP/SMTP
-  ├── runtime/: Ollama, hardware-aware context budgets, SQLCipher, capability probes
+  ├── runtime/: llama.cpp, hardware-aware context budgets, SQLCipher, capability probes
   ├── planner/: explainable priority rankings
   └── security/: loopback sessions, Keychain, encrypt/backup, network audit
   │
-  ├── Ollama HTTP (127.0.0.1:11434)
+  ├── Managed llama.cpp worker (private loopback port)
   ├── ~/Library/Application Support/PODA-Public/poda.db (SQLCipher, freshly created)
   ├── macOS Keychain (PODA.Public.* service names)
   ├── api.notion.com [only after integration is explicitly configured]
@@ -32,11 +32,11 @@ FastAPI application [poda_app/main.py]
 ## Chat, memory and tool request flow
 
 1. The browser obtains a process-scoped session cookie from the home page. Protected API calls require the cookie and valid browser-origin metadata.
-2. A new chat request obtains live runtime capabilities and a model profile using the measured physical memory registry and installed Ollama tags. The action gate blocks unsupported actions before the model can hallucinate execution.
+2. A new chat request obtains live runtime capabilities and a model profile using the measured physical memory registry and installed GGUF models. The action gate blocks unsupported actions before the model can hallucinate execution.
 3. User chat is persisted in encrypted SQLite and mirrored into a visible source memory node. The memory engine retrieves from FTS5/text embeddings/reference triggers and manually committed semantic positions, favoring relevant surface memories before optionally diving into full conversation pairs.
 4. The tool orchestrator validates model-suggested arguments. Read-only approved tools can execute directly with receipts; mutations need an explicit confirmation proposal. External contents remain untrusted data.
 5. The assistant's response is streamed into the UI; the pair of user request and assistant answer is a single visible conversation node; prior assistant assertions remain contextual rather than authoritative.
-6. If memory text changed, **queue** its embedding within the SQLCipher transaction, **commit**, and only then contact Ollama. A disconnected embedding server leaves a durable pending job; lookup falls back to cached vectors and lexical search.
+6. If memory text changed, **queue** its embedding within the SQLCipher transaction, **commit**, and only then contact llama.cpp. A disconnected embedding server leaves a durable pending job; lookup falls back to cached vectors and lexical search.
 
 ## 3D memory representation
 

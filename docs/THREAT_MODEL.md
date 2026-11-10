@@ -24,8 +24,8 @@ This document describes implemented boundaries, known limitations, and deliberat
 | Files | Canonicalized explicit folder grants; no general delete tool; hash-verified writes and receipts | A malicious local process or elevated macOS app may still read granted paths; symlink race windows depend on filesystem operations |
 | Code | Requires explicit execute grant **and** macOS `sandbox-exec`; absent sandbox = blocked by default. Expert override must use exact `PODA_UNSAFE_EXECUTE` acknowledgement | `sandbox-exec` is deprecated and not a formally validated escape-proof security boundary; use a restricted user/VM for untrusted programs |
 | External CLI | Disabled by default; opt-in exact `PODA_ALLOW_EXTERNAL_SOFTWARE` acknowledgement and per-harness permissions | If enabled, harnesses may execute with the full logged-in user's OS permissions and may contact the internet |
-| LLM | Local Ollama; capability ledger injected on requests; retrieved email, Notion, files and prior assistant replies marked as untrusted | Language models still make mistakes. Never rely solely on model output as a proof of side effects; check receipts and underlying source |
-| Memory commit | Changes committed atomically; embeddings queued and refreshed **after** the write transaction; cached/lexical fallback offline | Without Ollama, newly edited text may not have updated vector relations until a retry succeeds |
+| LLM | Local llama.cpp; capability ledger injected on requests; retrieved email, Notion, files and prior assistant replies marked as untrusted | Language models still make mistakes. Never rely solely on model output as a proof of side effects; check receipts and underlying source |
+| Memory commit | Changes committed atomically; embeddings queued and refreshed **after** the write transaction; cached/lexical fallback offline | Without llama.cpp, newly edited text may not have updated vector relations until a retry succeeds |
 
 ## What "no other program can see" does not mean
 

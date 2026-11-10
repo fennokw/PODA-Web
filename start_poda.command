@@ -11,6 +11,8 @@ if [ ! -d .venv ] || ! .venv/bin/python -c 'import fastapi,pydantic,uvicorn,open
   ./setup_poda.command
 fi
 
+.venv/bin/python -m poda_app.runtime.chat_renderers
+
 EXPECTED_BUILD="$(.venv/bin/python -c 'from poda_app.runtime.config import BUILD_ID; print(BUILD_ID)')"
 
 existing_pid="$(lsof -tiTCP:${PORT} -sTCP:LISTEN 2>/dev/null | head -1 || true)"
@@ -47,21 +49,6 @@ if [ -n "$existing_pid" ]; then
     echo "PODA will not kill unrelated services. Stop it yourself or run: PODA_PORT=8788 ./start_poda.command"
     exit 1
   fi
-fi
-
-if ! command -v ollama >/dev/null 2>&1; then
-  echo "WARNING: Ollama is not installed. The UI will start, but chat and semantic memory need Ollama (https://ollama.com/download/mac)."
-else
-  if ! curl -s http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
-    echo "Starting Ollama service..."
-    (ollama serve >/tmp/poda-ollama.log 2>&1 &) || true
-    sleep 3
-  fi
-  for m in nomic-embed-text llama3.2:3b qwen3:14b; do
-    if ! curl -s http://127.0.0.1:11434/api/tags | grep -q "\"$m"; then
-      echo "Model $m is not installed. Run ./install_ollama_models.command"
-    fi
-  done
 fi
 
 PODA_DATA_DIR="${PODA_DATA_DIR:-$HOME/Library/Application Support/PODA-Web}"
