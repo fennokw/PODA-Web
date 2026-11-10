@@ -22,3 +22,5 @@ Mail supports Gmail and the platform's native connector, Apple Mail or Classic O
 For installed apps, see [PODA for Mac](https://github.com/fennokw/PODA) and [PODA for Windows](https://github.com/fennokw/PODA-Windows).
 
 The upstream PODA source is distributed under [LICENSE-PODA](LICENSE-PODA). This repository's license is in [LICENSE](LICENSE).
+
+Daily Automation resolves email event dates against the original send time, then verifies authorized Notion additions. To use the same read-only scheduling tools from an MCP client, run `python -m poda_app.scheduling.mcp` over stdio from the source folder with the PODA Python environment.
