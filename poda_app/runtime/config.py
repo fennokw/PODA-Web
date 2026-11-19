@@ -59,6 +59,8 @@ NOTION_KEYCHAIN_SERVICE = "PODA.Public.Notion"
 NOTION_KEYCHAIN_ACCOUNT = "primary"
 
 EGRESS_ALLOWLIST = {
+    "github": {"api.github.com"},
+    "brave_search": {"api.search.brave.com"},
     "notion": {"api.notion.com"},
     "ollama": {"127.0.0.1", "localhost"},
 }

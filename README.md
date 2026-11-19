@@ -22,3 +22,10 @@ Mail supports Gmail and the platform's native connector, Apple Mail or Classic O
 For installed apps, see [PODA for Mac](https://github.com/fennokw/PODA) and [PODA for Windows](https://github.com/fennokw/PODA-Windows).
 
 The upstream PODA source is distributed under [LICENSE-PODA](LICENSE-PODA). This repository's license is in [LICENSE](LICENSE).
+
+
+## Coding workspaces
+
+In **Files & Agent**, grant a local folder to inspect and edit it with PODA. A folder can be used without GitHub. For a remote GitHub repository, configure one selected repository and a fine-grained token in **GitHub workspace**. In Chat, ask PODA to inspect that repository, read code at a pinned revision, or prepare a patch. Enable Contents and Pull requests write permissions if you want to approve publishing a draft PR. GitHub publication is separate from running tests.
+
+Enable **Web research** to read public HTTPS pages or PDFs. Configure a Brave Search API key to search for sources. This edition runs its backend and inference on your computer.
