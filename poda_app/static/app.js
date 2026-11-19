@@ -932,8 +932,62 @@
       try { await api('/agent/grants', { method: 'POST', body: { root_path: fd.get('root_path'), mode: fd.get('mode'), label: fd.get('label') || null, allow_execute: fd.get('allow_execute') === 'on', ttl_minutes: +fd.get('ttl_minutes') || null } }); form.reset(); toast('Access granted. Ledger updated.', 'ok'); refresh(); }
       catch (err) { toast(errorDetail(err).message, 'danger'); }
     });
+    const githubBox = el('div');
+    const webBox = el('div');
+    function connectorForms() {
+      return Promise.all([
+        load(githubBox, async () => {
+          const state = await api('/connections/github');
+          const form = el('form', {class:'stack-sm'},
+            el('p', {class:'small muted'}, 'Use a fine-grained GitHub token for one selected repository. Enable Contents and Pull requests write permissions if you want PODA to publish a draft PR.'),
+            el('label', {}, 'Repository', el('input', {class:'input', name:'repo', value:state.repo, placeholder:'owner/name', required:true})),
+            el('label', {}, 'GitHub token', el('input', {class:'input', type:'password', name:'token', required:true, autocomplete:'off'})),
+            el('label', {class:'check'}, el('input', {type:'checkbox', name:'write', checked:state.write}), 'Allow approval-based publishing'),
+            el('div', {class:'row'}, el('button', {class:'btn btn-primary', type:'submit'}, 'Connect repository'),
+              state.repo ? el('button', {class:'btn btn-sm', type:'button', onclick:async () => {
+                try { await api('/connections/github', {method:'DELETE'}); connectorForms(); }
+                catch (err) { toast(errorDetail(err).message, 'danger'); }
+              }}, 'Disconnect') : null));
+          form.onsubmit = async event => {
+            event.preventDefault();
+            const data = new FormData(form);
+            try {
+              await api('/connections/github', {method:'PUT', body:{repo:data.get('repo'), token:data.get('token'), write:data.has('write')}});
+              toast('GitHub repository verified.', 'ok'); connectorForms();
+            } catch (err) { toast(errorDetail(err).message, 'danger'); }
+            finally { form.elements.token.value = ''; }
+          };
+          return form;
+        }),
+        load(webBox, async () => {
+          const state = await api('/connections/web');
+          const form = el('form', {class:'stack-sm'},
+            el('label', {class:'check'}, el('input', {type:'checkbox', name:'enabled', checked:state.enabled}), 'Read public web pages and PDFs'),
+            el('label', {}, state.search ? 'Replace saved Brave Search API key' : 'Brave Search API key (optional)',
+              el('input', {class:'input', type:'password', name:'search_key', autocomplete:'off'})),
+            el('p', {class:'small muted'}, 'Search sends the query to Brave. Page reading sends requests to the selected public sites. PODA inference stays local.'),
+            el('div', {class:'row'}, el('button', {class:'btn btn-primary', type:'submit'}, 'Save web settings'),
+              state.search ? el('button', {class:'btn btn-sm', type:'button', onclick:async () => {
+                try { await api('/connections/web', {method:'PUT', body:{enabled:form.elements.enabled.checked, search_key:''}}); connectorForms(); }
+                catch (err) { toast(errorDetail(err).message, 'danger'); }
+              }}, 'Remove search key') : null));
+          form.onsubmit = async event => {
+            event.preventDefault();
+            const data = new FormData(form);
+            const body = {enabled:data.has('enabled')};
+            if (data.get('search_key')) body.search_key = data.get('search_key');
+            try { await api('/connections/web', {method:'PUT', body}); toast('Web settings saved.', 'ok'); connectorForms(); }
+            catch (err) { toast(errorDetail(err).message, 'danger'); }
+            finally { form.elements.search_key.value = ''; }
+          };
+          return form;
+        })
+      ]);
+    }
+    connectorForms();
     view.appendChild(el('div', { class: 'screen stack' },
       el('div', { class: 'grid-main-side' }, section('File and path grants', 'scoped access to your files', grantsBox), section('Grant access', null, form)),
+      el('div', { class: 'grid-2' }, section('GitHub workspace', null, githubBox), section('Web research', null, webBox)),
       el('div', { class: 'grid-2' }, section('Tool registry', 'what the agent can call', toolsBox), section('Pending proposals', 'awaiting your approval', proposalsBox)),
       section('Action receipts', 'the only evidence of a completed side effect', receiptsBox),
       softwarePanel()));
